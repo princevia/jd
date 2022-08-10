@@ -1,0 +1,289 @@
+{% extends "base.html" %}
+{% block extra_head %}
+<style>
+  <style>
+    *, *::before, *::after {
+      box-sizing:border-box;
+    }
+    
+    .col-md-4 > body {
+      margin: 0;
+    }
+    
+    .col-md-4 {
+      position: relative;
+      height: 3vh;
+      top: ;
+    
+    }
+    
+    .col-md-4 > ul {
+      margin: 0;
+      padding: 0;
+      list-style: none;
+    }
+    .slide {
+      position: absolute;
+      inset: 0;
+      opacity: 0;
+      transition: 200ms opacity ease-in-out;
+      transition-delay: 200ms;
+    }
+    
+    .slide {
+      display: block;
+      height: 70%;
+      width: 70%;
+      margin: auto;
+     
+      object-fit: cover;
+      object-position: center;
+    }
+    
+    .slide[data-active] {
+      opacity: 1;
+      z-index: 1;
+      transition-delay: 0ms;
+    }
+    .carousel-button {
+      position: absolute;
+      z-index: 2;
+      background: none;
+      border: none;
+      font-size: 1rem;
+      margin-top: 75%;
+      transform: translateY(-50%);
+      color: rgba(255, 255, 255, .5);
+      cursor: pointer;
+      border-radius: .25rem;
+      padding: 0 .5rem;
+      background-color: rgba(0, 0, 0, .1);
+    }
+    
+    .carousel-button:hover,
+    .carousel-button:focus {
+      color: blue;
+      background-color: rgba(0, 0, 0, .2);
+    }
+    
+    .carousel-button:focus {
+      outline: 1px solid black;
+    }
+    
+    .carousel-button.prev {
+      left: 0.25rem;
+    }
+    
+    .carousel-button.next {
+      right: 0.5rem;
+    }
+    
+    
+    @media (max-width: 880px) {
+      .card {
+        height: 80vh;
+      
+      }
+      .slide {
+      display: block;
+      height: 90%;
+      width: 90%;
+      margin: auto;
+      top: 95%;
+      object-fit: cover;
+      object-position: center;
+    }
+    .carousel-button {
+      position: absolute;
+      z-index: 2;
+      background: none;
+      border: none;
+      font-size: 5rem;
+      top: 95%;
+      color: blue;
+      font-size: 1.5rem;
+      transform: translateY(-50%);
+    }
+    .carousel-button.prev {
+      left: 0.5rem;
+    }
+    
+    .carousel-button.next {
+      right: 0.5rem;
+    }
+    
+    
+    }
+  </style>
+  
+</style>
+{% endblock extra_head %}
+
+{% block content %}
+
+  <main class="mt-5 pt-4">
+    <div class="container dark-grey-text mt-5">
+
+      <!--Grid row-->
+      <div class="row wow fadeIn">
+
+        <!--Grid column-->
+        
+        <div class="col-md-4 mb-2" data-carousel>
+          <ul data-slides>        
+            <li class="slide" data-active><img src="{{ item.image.url }}" class="img-fluid" alt=""></li>
+            <li class="slide"><img src="{{ item.image_1.url }}" class="img-fluid" alt=""></li>
+            <li class="slide"><img src="{{ item.image_2.url }}" class="img-fluid" alt=""></li>
+            <li class="slide"><img src="{{ item.image_3.url }}" class="img-fluid" alt=""></li>
+            <li class="slide"><img src="{{ item.image.url }}" class="img-fluid" alt=""></li>
+            <li class="slide"><img src="{{ item.image_3.url }}" class="img-fluid" alt=""></li>
+          </ul>
+
+          <button class="carousel-button prev"  data-carousel-button="prev">&#8656;</button>
+          <button class="carousel-button next"  data-carousel-button="next">&#8658;</button>
+        </div>
+        <!--Grid column-->
+
+        <!--Grid column-->
+        <div class="col-md-5 mb-4">
+
+          <!--Content-->
+          <div class="p-4">
+
+            <div class="mb-3">
+              <a href="">
+                <span class="badge purple mr-1">{{ object.get_category_display }}</span>
+              </a>
+            </div>
+
+            <p class="lead">
+              {% if object.discount_price %}
+              <span class="mr-1">
+                <del>₦{{ object.price }}</del>
+              </span>
+              <span><h1 class="lead font-weight-bold">₦{{ object.discount_price }}</h1></span>
+              {% else %}
+              <span>₦{{ object.price }}</span>
+              {% endif %}
+            </p>
+
+            <p class="lead font-weight-bold">Description</p>
+
+            <p>{{ object.description }}</p>
+
+            {% comment %} <form class="d-flex justify-content-left">
+              <!-- Default input -->
+              <input type="number" value="1" aria-label="Search" class="form-control" style="width: 100px">
+              <button class="btn btn-primary btn-md my-0 p" type="submit">
+                Add to cart
+                <i class="fas fa-shopping-cart ml-1"></i>
+              </button>
+
+            </form> {% endcomment %}
+            <a href="{{ object.get_add_to_cart_url }}" class="btn btn-primary btn-md my-0 p">
+              Add to cart
+              <i class="fas fa-shopping-cart ml-1"></i>
+            </a>
+            <a href="{{ object.get_remove_from_cart_url }}" class="btn btn-danger btn-md my-0 p">
+              Remove from cart
+            </a>
+
+          </div>
+          <!--Content-->
+
+        </div>
+        <!--Grid column-->
+        <div class="col-md-3 mb-2">
+          <div class="p-4"> 
+            Recommended 
+            <img src="{{ item.image_3.url }}" class="img-fluid" alt="">
+          </div>
+        </div>
+        <!--Grid column-->
+
+      </div>
+      <!--Grid row-->
+
+      <hr>
+
+      <!--Grid row-->
+      <div class="row d-flex justify-content-center wow fadeIn">
+
+        <!--Grid column-->
+        <div class="col-md-6 text-center">
+
+          <h4 class="my-4 h4">Additional information</h4>
+
+          <p>Lorem ipsum dolor sit amet consectetur adipisicing elit. Natus suscipit modi sapiente illo soluta odit
+            voluptates,
+            quibusdam officia. Neque quibusdam quas a quis porro? Molestias illo neque eum in laborum.</p>
+
+        </div>
+        <!--Grid column-->
+
+      </div>
+      <!--Grid row-->
+
+      <!--Grid row-->
+      <div class="row wow fadeIn">
+
+        <!--Grid column-->
+        <div class="col-lg-4 col-md-12 mb-4">
+
+          <img 
+          src="https://ae01.alicdn.com/kf/H32c556319d084e43974363feb0b1fc406/Necklace-Watch-Bracelet-Hip-Hop-Miami-Curb-Cuban-Chain-Silver-Color-Full-Iced-Out-Paved-Rhinestones.jpg_Q90.jpg_.webp" 
+          class="img-fluid" height="200px" width="200px" alt="">
+
+        </div>
+        <!--Grid column-->
+
+        <!--Grid column-->
+        <div class="col-lg-4 col-md-6 mb-4">
+
+          <img 
+          src="https://ae01.alicdn.com/kf/Hed57cc86a00f4ba98fbba19b9ee6cfc7S/Fashion-Iced-Out-Hip-Hop-Diamond-Gold-and-Silver-Rhinestone-19mm-Cuban-Chain-Men-s-Rap.jpg_640x640.jpg" 
+          class="img-fluid" height="200px" width="200px" alt="">
+
+        </div>
+        <!--Grid column-->
+
+        <!--Grid column-->
+        <div class="col-lg-4 col-md-6 mb-4">
+
+          <img 
+          src="https://mdbootstrap.com/img/Photos/Horizontal/E-commerce/Products/13.jpg" 
+          class="img-fluid" height="200px" width="200px" alt="">
+
+        </div>
+        <!--Grid column-->
+       
+      </div>
+      <!--Grid row-->
+
+    </div>
+  </main>
+
+{% endblock content %}
+
+{% block extra_scripts %}
+<script>
+  const buttons = document.querySelectorAll("[ data-carousel-button]")
+
+  buttons.forEach(button => {
+    button.addEventListener("click", () => {
+      const offset = button.dataset.carouselButton === "next" ? 1:-1
+      const slides = button.closest("[data-carousel]").querySelector("[data-slides]")
+  
+  
+      const activeSlide = slides.querySelector("[data-active]")
+      let newIndex = [...slides.children].indexOf(activeSlide) + offset
+      if(newIndex < 0) newIndex = slides.children.length - 1 
+      if(newIndex >= slides.children.length) newIndex = 0
+  
+      slides.children[newIndex].dataset.active = true
+      delete activeSlide.dataset.active
+    })
+  })
+</script>
+{% endblock extra_scripts %}
+

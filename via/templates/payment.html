@@ -1,0 +1,193 @@
+{% extends "base.html" %}
+{% load crispy_forms_tags %}
+{% block extra_head %}
+<style>
+
+#payBtnLabel {
+  font-family: "Helvetica Neue", Helvetica, sans-serif;
+  font-size: 16px;
+  font-variant: normal;
+  padding: 0;
+  margin: 0;
+  -webkit-font-smoothing: antialiased;
+  font-weight: 500;
+  display: block;
+}
+.input {
+  width: 100%;
+}
+#payBtn {
+  border: none;
+  border-radius: 4px;
+  outline: none;
+  text-decoration: none;
+  color: #fff;
+  background: #32325d;
+  white-space: nowrap;
+  display: inline-block;
+  height: 40px;
+  line-height: 40px;
+  box-shadow: 0 4px 6px rgba(50, 50, 93, .11), 0 1px 3px rgba(0, 0, 0, .08);
+  font-size: 15px;
+  font-weight: 600;
+  letter-spacing: 0.025em;
+  text-decoration: none;
+  -webkit-transition: all 150ms ease;
+  transition: all 150ms ease;
+  float: left;
+  width: 100%
+}
+
+button:hover {
+  transform: translateY(-1px);
+  box-shadow: 0 7px 14px rgba(50, 50, 93, .10), 0 3px 6px rgba(0, 0, 0, .08);
+  background-color: #43458b;
+}
+
+#paymentForm {
+  padding: 5px 30px;
+}
+
+#card-errors {
+  height: 20px;
+  padding: 4px 0;
+  color: #fa755a;
+}
+
+.form-group {
+  width: 100%;
+  float: left;
+  margin-top: 5px;
+  margin-bottom: 5px;
+}
+
+/**
+ * The CSS shown here will not be introduced in the Quickstart guide, but shows
+ * how you can use CSS to style your Element's container.
+ */
+.StripeElement {
+  box-sizing: border-box;
+
+  height: 40px;
+
+  padding: 10px 12px;
+
+  border: 1px solid transparent;
+  border-radius: 4px;
+  background-color: white;
+
+  box-shadow: 0 1px 3px 0 #e6ebf1;
+  -webkit-transition: box-shadow 150ms ease;
+  transition: box-shadow 150ms ease;
+}
+
+.StripeElement--focus {
+  box-shadow: 0 1px 3px 0 #cfd7df;
+}
+
+.StripeElement--invalid {
+  border-color: #fa755a;
+}
+
+.StripeElement--webkit-autofill {
+  background-color: #fefde5 !important;
+}
+
+.current-card-form {
+  display: none;
+}
+
+</style>
+{% endblock extra_head %}
+
+{% block content %}
+
+<main >
+  {% include "order_snippet.html" %}
+  <div class="container wow fadeIn">
+    <h2 class="my-5 h2 text-center">Payment</h2>
+      <div class="row">
+        <div class="col-md-12 mb-4">
+          <div class="card">
+            <form id="payment-form" method="POST">
+              {% csrf_token %}
+              {{ form|crispy }}
+                <div class="field">
+                  <strong>First name*</strong>
+                    <div class="form">
+                      <input type="text" class="input"/>
+                    </div>
+                  </div>
+                <div class="field">
+                  <strong>Last name*</strong>
+                    <div class="form">
+                      <input type="text" class="input"/>
+                    </div>
+                  </div>
+                <div class="field">
+                  <strong>Email*</strong>
+                    <div class="form">
+                      <input type="text" class="input"/>
+                    </div>
+                  </div>
+                <div class="field">
+                  <strong>Phone number*</strong>
+                    <div class="form">
+                      <input type="text" class="input"/>
+                    </div>
+                  </div>
+                </form>
+                  <br>
+                  <button id="payBtn" type="submit" onclick="payWithPayStack()">
+                    Submit Payment: ₦{{ order.get_total }}
+                  </button>
+                
+                
+          </div>
+        </div>
+      </div>
+  </div>
+</main>
+
+{% endblock content %}
+
+{% block extra_scripts %}
+
+
+<script nonce="">  // Create a Paystack client.
+
+  
+function payWithPayStack() {
+  let ref =  '{{ payment.ref }}'
+  let verified =  '{{ payment.verified }}'
+  var handler = PaystackPop.setup({
+    key: 'pk_live_e3d27b608a48267e716561ab901543ec392d958a', // Replace with your public key
+    email: '{{ order.user.email }}',
+    amount: ("{{ order.get_total }}" *100), // the amount value is multiplied by 100 to convert to the lowest currency unit
+    currency: 'NGN', // Use GHS for Ghana Cedis or USD for US Dollars
+    ref: ref, // Replace with a reference you generated
+    verified: verified,
+   
+    callback: function(response) {
+      //this happens after the payment is completed successfully
+  })
+      
+    },
+    onClose: function() {
+      alert('Transaction was not completed, window closed.');
+    },
+  });
+  handler.openIframe();
+  
+}
+  
+ 
+
+ 
+</script>
+
+{% endblock extra_scripts %}
+
+
+
+
